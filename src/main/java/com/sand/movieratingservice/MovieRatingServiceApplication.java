@@ -2,8 +2,9 @@ package com.sand.movieratingservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
-@SpringBootApplication public class MovieRatingServiceApplication
+@SpringBootApplication @EnableEurekaClient public class MovieRatingServiceApplication
 {
 
   public static void main(String[] args)
