@@ -1,8 +1,10 @@
 package com.sand.moviecatalogservice.resource;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.sand.moviecatalogservice.model.CatalogItem;
 import com.sand.moviecatalogservice.model.Movie;
 import com.sand.moviecatalogservice.model.UserRating;
@@ -21,6 +23,7 @@ public class MovieCatalogResource
   private RestTemplate restTemplate;
 
   @RequestMapping("/{userId}")
+  @HystrixCommand(fallbackMethod = "getFallbackCatalog")
   public List<CatalogItem> getCatalog(@PathVariable("userId") String userId)
   {
     UserRating userRating = restTemplate
@@ -30,5 +33,10 @@ public class MovieCatalogResource
       Movie movie = restTemplate.getForObject("http://movie-info-service/movies/" + rating.getMovieId(), Movie.class);
       return new CatalogItem(movie.getName(), movie.getDescription(), rating.getRating());
     }).collect(Collectors.toList());
+  }
+
+  public List<CatalogItem> getFallbackCatalog(@PathVariable("userId") String userId)
+  {
+    return Arrays.asList(new CatalogItem("No movie", "", 0));
   }
 }
