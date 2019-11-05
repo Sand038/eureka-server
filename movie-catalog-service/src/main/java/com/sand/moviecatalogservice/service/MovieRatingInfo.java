@@ -19,7 +19,6 @@ public class MovieRatingInfo
 
   @HystrixCommand(
       fallbackMethod = "getFallbackRating",
-      ,
       //      threadPoolKey = "movieRatingInfoPool",
       //      threadPoolProperties = {
       //          @HystrixProperty(name = "coreSize", value = "20"),
